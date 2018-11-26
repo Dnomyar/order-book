@@ -10,7 +10,7 @@ class OrderBookUpdaterSpec extends WordSpec with Matchers {
   "It" should {
     "be possible to apply several change requests to the book (with the book depth constraint 2)" in {
 
-      (new OrderBookUpdater).update(List(
+      (new OrderBookUpdater).update(Iterator(
         OrderBookChangeRequest(New, Bid, 1, TickPrice(5), Quantity(30)),
         OrderBookChangeRequest(New, Bid, 2, TickPrice(4), Quantity(40)),
         OrderBookChangeRequest(New, Ask, 1, TickPrice(6), Quantity(10)),
@@ -26,7 +26,7 @@ class OrderBookUpdaterSpec extends WordSpec with Matchers {
 
     "be possible to apply several change requests to the book (with the book depth constraint 1)" in {
 
-      (new OrderBookUpdater).update(List(
+      (new OrderBookUpdater).update(Iterator(
         OrderBookChangeRequest(New, Bid, 1, TickPrice(5), Quantity(30)),
         OrderBookChangeRequest(New, Bid, 2, TickPrice(4), Quantity(40)),
         OrderBookChangeRequest(New, Ask, 1, TickPrice(6), Quantity(10)),
