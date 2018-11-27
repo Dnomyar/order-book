@@ -1,4 +1,4 @@
-package order.book.domain.change.request
+package order.book.domain.commands
 
 sealed trait OrderBookSide
 

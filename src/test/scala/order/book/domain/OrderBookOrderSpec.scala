@@ -2,6 +2,8 @@ package order.book.domain
 
 import org.scalatest.{Matchers, WordSpec}
 
+import scala.util.{Failure, Success}
+
 class OrderBookOrderSpec extends WordSpec with Matchers {
 
   "It" should {
@@ -14,23 +16,21 @@ class OrderBookOrderSpec extends WordSpec with Matchers {
 
     "be possible to remove a quantity to an existing order (|20 - 10| = 10)" in {
       Order(TickPrice(1), Quantity(20))
-        .minus(Quantity(10)) should be (Order(
+        .minus(Quantity(10)) should be (Success(Order(
         TickPrice(1), Quantity(10)
-      ))
+      )))
     }
 
     "be possible to remove a quantity to an existing order (|10 - 10| = 0)" in {
       Order(TickPrice(1), Quantity(10))
-        .minus(Quantity(10)) should be (Order(
+        .minus(Quantity(10)) should be (Success(Order(
         TickPrice(1), Quantity(0)
-      ))
+      )))
     }
 
     "be possible to remove a quantity to an existing order (|10 - 20| = 0)" in {
       Order(TickPrice(1), Quantity(10))
-        .minus(Quantity(20)) should be (Order(
-        TickPrice(1), Quantity(0)
-      ))
+        .minus(Quantity(20)).isFailure should be (true)
     }
 
     "be possible to replace a quantity to an existing order" in {

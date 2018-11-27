@@ -6,13 +6,13 @@ import order.book.domain.change.request.OrderBookInstruction.{New, Update}
 import order.book.domain.change.request.OrderBookSide.{Ask, Bid}
 import org.scalatest.{Matchers, WordSpec}
 
-import scala.util.Success
+import scala.util.{Failure, Success}
 
 class OrderBookChangeRequestParserSpec extends WordSpec with Matchers {
 
   "It" should {
-    "be possible to parse a file" in {
-      (new OrderBookChangeRequestParser).parseFile(
+    "be possible to parse a file if the file is ok" in {
+      (new OrderBookChangeRequestParserAdapter).parseFile(
         """N B 1 5 30
           |N B 2 4 40
           |N A 1 6 10
@@ -27,13 +27,15 @@ class OrderBookChangeRequestParserSpec extends WordSpec with Matchers {
         OrderBookChangeRequest(Update, Bid, 1, TickPrice(5), Quantity(40))
       )))
     }
-  }
 
-  "A line" should {
-    "be parsable" in {
-
-      //(new OrderBookChangeRequestParser)
-
+    "be possible to parse a file with errors" in {
+      (new OrderBookChangeRequestParserAdapter).parseFile(
+        """N B 1 5 30
+          |N B 2 4 40
+          |N A 1 6 10
+          |N A 2 7 10
+          |U  2 7 20
+          |U B 1 5 40""".stripMargin.toInputStream).map(_.toList).isFailure should be (true)
     }
   }
 

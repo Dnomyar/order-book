@@ -1,6 +1,11 @@
 package order.book.domain
 
 
+import order.book.domain.errors.DeletingTooMuchQuantityError
+
+import scala.util.{Failure, Success, Try}
+
+
 sealed trait OrderBookOrder {
   def describe(tickSize: TickSize): (Double, Quantity)
 }
@@ -21,8 +26,9 @@ case class Order(price: TickPrice, quantity: Quantity) extends OrderBookOrder {
   def plus(otherQuantity: Quantity): Order =
     copy(quantity = Quantity(quantity.value + otherQuantity.value))
 
-  def minus(otherQuantity: Quantity): Order =
-    copy(quantity = Quantity(Math.max(0, quantity.value - otherQuantity.value)))
+  def minus(otherQuantity: Quantity): Try[Order] =
+    if(otherQuantity.value > quantity.value) Failure(new DeletingTooMuchQuantityError(price, quantity, otherQuantity))
+    else Success(copy(quantity = Quantity(quantity.value - otherQuantity.value)))
 
   override def describe(tickSize: TickSize): (Double, Quantity) = (price.computePrice(tickSize), quantity)
 }

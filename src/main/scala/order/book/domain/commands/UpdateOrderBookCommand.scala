@@ -1,8 +1,8 @@
-package order.book.domain.change.request
+package order.book.domain.commands
 
 import order.book.domain.{Quantity, TickPrice}
 
-case class OrderBookChangeRequest(instruction: OrderBookInstruction,
+case class UpdateOrderBookCommand(instruction: OrderBookInstruction,
                                   side: OrderBookSide,
                                   priceLevelIndex: Int,
                                   price: TickPrice,

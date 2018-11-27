@@ -12,7 +12,7 @@ class OrderBookSideSpec extends WordSpec with Matchers {
         1,
         TickPrice(5),
         Quantity(30)
-      ).orders should be (Vector(
+      ).get.orders should be (Vector(
         Order(TickPrice(5), Quantity(30))
       ))
     }
@@ -25,12 +25,12 @@ class OrderBookSideSpec extends WordSpec with Matchers {
           TickPrice(5),
           Quantity(30)
         )
-        .applyOrderChange(
+        .get.applyOrderChange(
           Update,
           1,
           TickPrice(5),
           Quantity(40)
-        ).orders should be (Vector(
+        ).get.orders should be (Vector(
           Order(TickPrice(5), Quantity(40))
         ))
     }
@@ -43,12 +43,12 @@ class OrderBookSideSpec extends WordSpec with Matchers {
           TickPrice(5),
           Quantity(30)
         )
-        .applyOrderChange(
+        .get.applyOrderChange(
           Delete,
           1,
           TickPrice(5),
           Quantity(10)
-        ).orders should be (Vector(
+        ).get.orders should be (Vector(
           Order(TickPrice(5), Quantity(20))
         ))
     }
@@ -61,18 +61,18 @@ class OrderBookSideSpec extends WordSpec with Matchers {
           TickPrice(5),
           Quantity(30)
         )
-        .applyOrderChange(
+        .get.applyOrderChange(
           New,
           2,
           TickPrice(4),
           Quantity(40)
         )
-        .applyOrderChange(
+        .get.applyOrderChange(
           Update,
           1,
           TickPrice(5),
           Quantity(40)
-        ).orders should be (Vector(
+        ).get.orders should be (Vector(
           Order(TickPrice(5), Quantity(40)),
           Order(TickPrice(4), Quantity(40))
         ))
