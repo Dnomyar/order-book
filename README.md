@@ -39,7 +39,7 @@ sbt test
 ```
 
 ## Complexity
-The complexity of the algorithm itself is `O(|updateOrderBookCommands| + book_depth)`.
+The complexity of the algorithm itself is `O(|updateOrderBookCommands| + book_depth)`. The parser part could probably be improved to be quicker.
 
 
 ## Example

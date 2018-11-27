@@ -42,7 +42,7 @@ class UpdateOrderBookCommandParser {
       else error
     }
 
-    line.trim.split(" ").map(_.trim) match {
+    line.split(" ") match {
       case Array(instructionRaw, sideRaw, priceLevelIndexRaw, priceRaw, quantityRaw) =>
 
         for{
