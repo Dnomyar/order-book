@@ -40,3 +40,26 @@ sbt test
 
 ## Complexity
 The complexity of the algorithm itself is `O(|updateOrderBookCommands| + book_depth)`.
+
+
+## Example
+- `lot-of-updates.txt`
+```
+N B 1 5 30
+N B 2 4 40
+N A 1 6 10
+N A 2 7 10
+U A 2 7 20
+U B 1 5 40
+```
+
+```
+sbt "run lot-of-updates.txt 10.0 100"
+```
+- Output
+```
+50.0,40,60.0,10
+40.0,40,70.0,20
+```
+- Visually 
+![Visual example](./images/example.png)
