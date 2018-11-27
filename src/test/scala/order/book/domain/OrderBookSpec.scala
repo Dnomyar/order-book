@@ -46,7 +46,7 @@ class OrderBookSpec extends WordSpec with Matchers {
           1,
           TickPrice(5),
           Quantity(30)
-        )).get.describeOrderBook(TickSize(10)) should be (List(
+        )).get.project(TickSize(10)) should be (List(
         OrderBookProjection(0, Quantity(0), 50, Quantity(30))
       ))
     }

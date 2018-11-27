@@ -8,13 +8,14 @@ import scala.util.Try
 
 class OrderBookComputerImplementation extends OrderBookComputer {
 
+  // O(|updateOrderBookCommands| + book_depth)
   def compute(updateOrderBookCommands: Iterator[UpdateOrderBookCommand], tickSize: TickSize, bookDepth: Int): Try[List[OrderBookProjection]] =
     updateOrderBookCommands
       .filter(_.priceLevelIndex <= bookDepth)
       .foldLeft(Try(OrderBook(bookDepth))){
         case (bookTry, order) => bookTry.flatMap(_.applyChange(order))
       }
-      .map(_.describeOrderBook(tickSize))
+      .map(_.project(tickSize))
 
 
 }

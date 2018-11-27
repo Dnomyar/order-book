@@ -8,6 +8,7 @@ import scala.util.{Failure, Success, Try}
 
 case class OrderBookSide private[OrderBookSide] (orders: Vector[OrderBookOrder]) {
 
+  // O(1)
   def applyOrderChange(instruction: OrderBookInstruction,
                        priceLevelIndex: Int,
                        price: TickPrice,
@@ -37,13 +38,14 @@ case class OrderBookSide private[OrderBookSide] (orders: Vector[OrderBookOrder])
   }
 
 
+  // O(updateOrders) = O(updateOrder)
   private def updateOrders(priceLevelIndex: Int)(updateOrder: OrderBookOrder => Try[OrderBookOrder]): Try[OrderBookSide] = {
     val vectorIndex = priceLevelIndex - 1
 
     for{
-      orderToUpdate <- Try(orders(vectorIndex))
+      orderToUpdate <- Try(orders(vectorIndex)) // O(1)
       newOrder <- updateOrder(orderToUpdate)
-      ordersUpdated <- Try(orders.updated(vectorIndex, newOrder))
+      ordersUpdated <- Try(orders.updated(vectorIndex, newOrder)) // O(1)
     } yield copy(orders = ordersUpdated)
   }
 }
