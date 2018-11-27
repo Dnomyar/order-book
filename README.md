@@ -62,4 +62,5 @@ sbt "run lot-of-updates.txt 10.0 100"
 40.0,40,70.0,20
 ```
 - Visually 
+
 ![Visual example](./images/example.png)
