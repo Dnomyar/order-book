@@ -1,29 +1,29 @@
-package order.book.infrastructure
+package order.book.application
 
 import java.io.{File, FileInputStream, InputStream}
 
+import order.book.application.errors.UnexpectedCharError
+import order.book.domain.commands.OrderBookInstruction.{Delete, New, Update}
+import order.book.domain.commands.OrderBookSide.{Ask, Bid}
+import order.book.domain.commands.UpdateOrderBookCommand
 import order.book.domain.{Quantity, TickPrice}
-import order.book.domain.change.request.OrderBookChangeRequest
-import order.book.domain.change.request.OrderBookInstruction.{Delete, New, Update}
-import order.book.domain.change.request.OrderBookSide.{Ask, Bid}
-import order.book.domain.ports.OrderBookChangeRequestFetcher
 
 import scala.io.Source
 import scala.language.higherKinds
 import scala.util.{Failure, Success, Try}
 
 
-class OrderBookChangeRequestParserAdapter extends OrderBookChangeRequestFetcher {
+class UpdateOrderBookCommandParser {
 
-  override def fetch(filename: String): Try[Iterator[OrderBookChangeRequest]] =
+  def parseFile(filename: String): Try[Iterator[UpdateOrderBookCommand]] =
     for{
       inputStream <- Try(new FileInputStream(new File(filename)))
-      orders <- parseFile(inputStream)
+      orders <- parseInputStream(inputStream)
     } yield orders
 
 
   // TODO not the most elegant way
-  def parseFile(inputStream: InputStream): Try[Iterator[OrderBookChangeRequest]] = Try{
+  def parseInputStream(inputStream: InputStream): Try[Iterator[UpdateOrderBookCommand]] = Try{
     Source.fromInputStream(inputStream).getLines()
       .map(readLine)
       .collect{
@@ -33,10 +33,10 @@ class OrderBookChangeRequestParserAdapter extends OrderBookChangeRequestFetcher 
   }
 
 
-  private def readLine(line: String): Try[OrderBookChangeRequest] = {
+  private def readLine(line: String): Try[UpdateOrderBookCommand] = {
 
     def isOneOf(str: String)(expectedChars: List[Char]): Try[Char] = {
-      val error = Failure(new Exception(s"Expected one of $expectedChars"))
+      val error = Failure(new UnexpectedCharError(expectedChars))
       if(str.length != 1) error
       else if(expectedChars.contains(str.head)) Success(str.head)
       else error
@@ -51,7 +51,7 @@ class OrderBookChangeRequestParserAdapter extends OrderBookChangeRequestFetcher 
           priceLevelIndex <- Try(priceLevelIndexRaw.toInt)
           price <- Try(priceRaw.toInt)
           quantity <- Try(quantityRaw.toInt)
-        } yield OrderBookChangeRequest(
+        } yield UpdateOrderBookCommand(
           instruction match {
             case 'N' => New
             case 'U' => Update

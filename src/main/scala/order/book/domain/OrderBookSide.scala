@@ -1,7 +1,7 @@
 package order.book.domain
 
-import order.book.domain.change.request.OrderBookInstruction
-import order.book.domain.change.request.OrderBookInstruction.{Delete, New, Update}
+import order.book.domain.commands.OrderBookInstruction
+import order.book.domain.commands.OrderBookInstruction.{Delete, New, Update}
 import order.book.domain.errors.{CannotDeleteEmptyOrderError, UpdatingNonExistingValueError}
 
 import scala.util.{Failure, Success, Try}

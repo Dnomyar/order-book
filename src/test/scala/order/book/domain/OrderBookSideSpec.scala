@@ -1,6 +1,6 @@
 package order.book.domain
 
-import order.book.domain.change.request.OrderBookInstruction.{Delete, New, Update}
+import order.book.domain.commands.OrderBookInstruction.{Delete, New, Update}
 import org.scalatest.{Matchers, WordSpec}
 
 class OrderBookSideSpec extends WordSpec with Matchers {
@@ -53,7 +53,7 @@ class OrderBookSideSpec extends WordSpec with Matchers {
         ))
     }
 
-    "be possible to do several actions and get the excepted result" in {
+    "be possible to do several actions and get the excepted projections" in {
       OrderBookSide(2)
         .applyOrderChange(
           New,

@@ -1,10 +1,9 @@
-package order.book.domain.result
+package order.book.domain.projections
 
 import order.book.domain._
-import order.book.domain.projections.OrderBookProjection
 import org.scalatest.{Matchers, WordSpec}
 
-class OrderBookDescriptionSpec extends WordSpec with Matchers {
+class OrderBookProjectionSpec extends WordSpec with Matchers {
 
   "It" should {
     "be possible to build an OrderBookProjection from the prise size, the bid and the ask orders" in {

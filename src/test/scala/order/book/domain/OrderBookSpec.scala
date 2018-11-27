@@ -1,9 +1,8 @@
 package order.book.domain
 
-import order.book.domain.change.request.OrderBookChangeRequest
-import order.book.domain.OrderBookSide._
-import order.book.domain.change.request.OrderBookInstruction.New
-import order.book.domain.change.request.OrderBookSide.{Ask, Bid}
+import order.book.domain.commands.OrderBookInstruction.New
+import order.book.domain.commands.OrderBookSide.{Ask, Bid}
+import order.book.domain.commands.UpdateOrderBookCommand
 import order.book.domain.projections.OrderBookProjection
 import org.scalatest.{Matchers, WordSpec}
 
@@ -13,7 +12,7 @@ class OrderBookSpec extends WordSpec with Matchers {
   "It" should {
     "be possible to apply a change to the bid size" in {
       val book = OrderBook(1)
-        .applyChange(OrderBookChangeRequest(
+        .applyChange(UpdateOrderBookCommand(
           New,
           Bid,
           1,
@@ -27,7 +26,7 @@ class OrderBookSpec extends WordSpec with Matchers {
 
     "be possible to apply a change to the ask size" in {
       val book = OrderBook(1)
-        .applyChange(OrderBookChangeRequest(
+        .applyChange(UpdateOrderBookCommand(
           New,
           Ask,
           1,
@@ -41,7 +40,7 @@ class OrderBookSpec extends WordSpec with Matchers {
 
     "be possible to describe a book" in {
       OrderBook(1)
-        .applyChange(OrderBookChangeRequest(
+        .applyChange(UpdateOrderBookCommand(
           New,
           Ask,
           1,

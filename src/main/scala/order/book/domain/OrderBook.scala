@@ -1,7 +1,7 @@
 package order.book.domain
 
-import order.book.domain.change.request.OrderBookSide.{Ask, Bid}
-import order.book.domain.change.request.OrderBookChangeRequest
+import order.book.domain.commands.OrderBookSide.{Ask, Bid}
+import order.book.domain.commands.UpdateOrderBookCommand
 import order.book.domain.projections.OrderBookProjection
 
 import scala.util.Try
@@ -10,7 +10,7 @@ import scala.util.Try
 
 case class OrderBook private[OrderBook] (bids: OrderBookSide, asks: OrderBookSide) {
 
-  def applyChange(changeRequest: OrderBookChangeRequest): Try[OrderBook] =
+  def applyChange(changeRequest: UpdateOrderBookCommand): Try[OrderBook] =
     updateSide(changeRequest.side)(_.applyOrderChange(
       changeRequest.instruction,
       changeRequest.priceLevelIndex,
@@ -19,7 +19,7 @@ case class OrderBook private[OrderBook] (bids: OrderBookSide, asks: OrderBookSid
     ))
 
 
-  private def updateSide(side: change.request.OrderBookSide)(updateSideFunction: OrderBookSide => Try[OrderBookSide]): Try[OrderBook] = side match {
+  private def updateSide(side: commands.OrderBookSide)(updateSideFunction: OrderBookSide => Try[OrderBookSide]): Try[OrderBook] = side match {
     case Bid => updateSideFunction(bids).map(newBids => copy(bids = newBids))
     case Ask => updateSideFunction(asks).map(newAsks => copy(asks = newAsks))
   }
