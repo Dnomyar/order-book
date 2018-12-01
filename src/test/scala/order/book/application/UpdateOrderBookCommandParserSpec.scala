@@ -10,7 +10,7 @@ import scala.util.Success
 
 class UpdateOrderBookCommandParserSpec extends WordSpec with Matchers {
 
-  val parser = new UpdateOrderBookCommandParser
+  val parser = new UpdateOrderBookCommandParser(new ParseUpdateOrderBookCommandStateMonad)
 
 
   "It" should {

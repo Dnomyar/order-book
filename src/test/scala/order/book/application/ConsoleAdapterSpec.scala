@@ -11,7 +11,7 @@ import scala.util.Success
 
 class ConsoleAdapterSpec extends WordSpec with Matchers {
 
-  val consoleAdapter = new ConsoleAdapter(new OrderBookComputerImplementation, new UpdateOrderBookCommandParser)
+  val consoleAdapter = new ConsoleAdapter(new OrderBookComputerImplementation, new UpdateOrderBookCommandParser(new ParseUpdateOrderBookCommandStateMonad))
 
   "Program arguments" should {
     "be parsable" in {

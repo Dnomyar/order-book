@@ -16,7 +16,7 @@ import scala.util.Random
   */
 object GenerateOrderBookCommands {
 
-  val NUMBER_OF_UPDATES = 10000000
+  val NUMBER_OF_UPDATES = 100000000
   val BOOK_DEPTH = 100
   val AVG_PRICE = 100
   val MAX_QUANTITY = 1000

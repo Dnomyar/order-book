@@ -6,7 +6,7 @@ import org.scalatest.{Matchers, WordSpec}
 class OrderBookSideSpec extends WordSpec with Matchers {
 
   "It" should {
-    "be possible to add an order in a side of the book" in {
+    "be possible to add an order in a sideParser of the book" in {
       OrderBookSide(1).applyOrderChange(
         New,
         1,
@@ -17,7 +17,7 @@ class OrderBookSideSpec extends WordSpec with Matchers {
       ))
     }
 
-    "be possible to update an order in a side of the book" in {
+    "be possible to update an order in a sideParser of the book" in {
       OrderBookSide(1)
         .applyOrderChange(
           New,
@@ -35,7 +35,7 @@ class OrderBookSideSpec extends WordSpec with Matchers {
         ))
     }
 
-    "be possible to delete an order in a side of the book" in {
+    "be possible to delete an order in a sideParser of the book" in {
       OrderBookSide(1)
         .applyOrderChange(
           New,

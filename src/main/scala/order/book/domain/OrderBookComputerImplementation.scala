@@ -1,10 +1,13 @@
 package order.book.domain
 
+import akka.stream.IOResult
+import akka.stream.scaladsl.Source
 import order.book.domain.commands.UpdateOrderBookCommand
 import order.book.domain.ports.OrderBookComputer
 import order.book.domain.projections.OrderBookProjection
 
-import scala.util.Try
+import scala.concurrent.Future
+import scala.util.{Success, Try}
 
 class OrderBookComputerImplementation extends OrderBookComputer {
 
@@ -17,5 +20,15 @@ class OrderBookComputerImplementation extends OrderBookComputer {
       }
       .map(_.project(tickSize))
 
-
+  override def computeAkkaStream(updateOrderBookCommands: Source[UpdateOrderBookCommand, Future[IOResult]], tickSize: TickSize, bookDepth: Int): Source[OrderBookProjection, Future[IOResult]] = {
+    updateOrderBookCommands
+      .filter(_.priceLevelIndex <= bookDepth)
+      .fold(Try(OrderBook(bookDepth))){
+        case (bookTry, order) => bookTry.flatMap(_.applyChange(order))
+      }
+      .collect{
+        case Success(value) => value
+      }
+      .mapConcat(_.project(tickSize))
+  }
 }
