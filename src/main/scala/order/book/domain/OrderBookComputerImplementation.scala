@@ -12,10 +12,10 @@ class OrderBookComputerImplementation extends OrderBookComputer {
   def compute(updateOrderBookCommands: Iterator[UpdateOrderBookCommand], tickSize: TickSize, bookDepth: Int): Try[List[OrderBookProjection]] =
     updateOrderBookCommands
       .filter(_.priceLevelIndex <= bookDepth)
-      .foldLeft(Try(OrderBook(bookDepth))){
+      .foldLeft(Try(OrderBook.empty)){
         case (bookTry, order) => bookTry.flatMap(_.applyChange(order))
       }
-      .map(_.project(tickSize))
+      .map(_.project(bookDepth, tickSize))
 
 
 }

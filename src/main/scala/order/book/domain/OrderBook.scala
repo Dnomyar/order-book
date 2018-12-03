@@ -10,7 +10,6 @@ import scala.util.Try
 
 case class OrderBook private[OrderBook] (bids: OrderBookSide, asks: OrderBookSide) {
 
-  // O(1)
   def applyChange(changeRequest: UpdateOrderBookCommand): Try[OrderBook] =
     updateSide(changeRequest.side)(_.applyOrderChange(
       changeRequest.instruction,
@@ -26,17 +25,17 @@ case class OrderBook private[OrderBook] (bids: OrderBookSide, asks: OrderBookSid
   }
 
 
-  // O(book_depth)
-  def project(tickSize: TickSize) : List[OrderBookProjection] =
-    bids.orders.zip(asks.orders)
+  def project(bookSize: Int, tickSize: TickSize) : List[OrderBookProjection] =
+    (0 until bookSize)
+      .zipAll(bids.getOrders, 0, EmptyOrder).map(_._2)
+      .zipAll(asks.getOrders, EmptyOrder, EmptyOrder)
       .map((OrderBookProjection.fromOrders(tickSize) _).tupled).toList
 
 }
 
 
 object OrderBook {
-  def apply(bookDepth: Int): OrderBook =
-    new OrderBook(OrderBookSide(bookDepth), OrderBookSide(bookDepth))
+  def empty: OrderBook = new OrderBook(OrderBookSide.empty, OrderBookSide.empty)
 }
 
 
