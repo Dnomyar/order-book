@@ -7,18 +7,21 @@ class OrderBookSideSpec extends WordSpec with Matchers {
 
   "It" should {
     "be possible to add an order in a side of the book" in {
-      OrderBookSide(1).applyOrderChange(
-        New,
-        1,
-        TickPrice(5),
-        Quantity(30)
-      ).get.orders should be (Vector(
-        Order(TickPrice(5), Quantity(30))
-      ))
+      OrderBookSide
+        .empty
+        .applyOrderChange(
+          New,
+          1,
+          TickPrice(5),
+          Quantity(30)
+        ).get.getOrders should be (List(
+          Order(TickPrice(5), Quantity(30))
+        ))
     }
 
     "be possible to update an order in a side of the book" in {
-      OrderBookSide(1)
+      OrderBookSide
+        .empty
         .applyOrderChange(
           New,
           1,
@@ -30,13 +33,14 @@ class OrderBookSideSpec extends WordSpec with Matchers {
           1,
           TickPrice(5),
           Quantity(40)
-        ).get.orders should be (Vector(
+        ).get.getOrders should be (List(
           Order(TickPrice(5), Quantity(40))
         ))
     }
 
     "be possible to delete an order in a side of the book" in {
-      OrderBookSide(1)
+      OrderBookSide
+        .empty
         .applyOrderChange(
           New,
           1,
@@ -48,13 +52,12 @@ class OrderBookSideSpec extends WordSpec with Matchers {
           1,
           TickPrice(5),
           Quantity(10)
-        ).get.orders should be (Vector(
-          Order(TickPrice(5), Quantity(20))
-        ))
+        ).get.getOrders should be (List.empty)
     }
 
-    "be possible to do several actions and get the excepted projections" in {
-      OrderBookSide(2)
+    "be possible to do several actions and get the excepted projections 1" in {
+      OrderBookSide
+        .empty
         .applyOrderChange(
           New,
           1,
@@ -72,7 +75,7 @@ class OrderBookSideSpec extends WordSpec with Matchers {
           1,
           TickPrice(5),
           Quantity(40)
-        ).get.orders should be (Vector(
+        ).get.getOrders should be (List(
           Order(TickPrice(5), Quantity(40)),
           Order(TickPrice(4), Quantity(40))
         ))

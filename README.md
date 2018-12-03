@@ -9,6 +9,29 @@ This project following the hexagonal architecture :
 - the package `domain` contains the business logic and the business objects.
 
 
+## Efficiency of operations
+- `N`ew order in the book : `O(log(book_depth))`
+- `U`pdate an order in the book : `O(log(book_depth))`
+- `D`elete an order in the book : `O(log(book_depth))`
+
+Overall, the complexity of the algorithm is `O(n * log(book_depth))` where `n` is the number of operations.
+
+
+### Data structure: immutable indexed AVL Tree
+#### Description
+To have this this complexity, the data structure used is an immutable AVL tree (self-balanced tree). The tree is transformed to be able to have this interface : 
+```scala
+sealed trait AVLIndexedTree[+T] {
+  def insert[U >: T](index: Int, elementToInsert: U): AVLIndexedTree[U]
+  def delete[U >: T](index: Int): AVLIndexedTree[U]
+  def updated[U >: T](index: Int, elementToInsert: U): AVLIndexedTree[U]
+}
+```
+This interface allows to insert, delete and update nodes of the tree using indexes instead of values. 
+
+#### How is works ?
+Every node know the number of children in the left and the right side. This enable to know the which side to choose for a given index.
+
 ## Usage
 
 ### Run
@@ -38,8 +61,6 @@ Where n is the book depth and price is in $.
 sbt test
 ```
 
-## Complexity
-The complexity of the algorithm itself is `O(|updateOrderBookCommands| + book_depth)`. The parser part could probably be improved to be quicker.
 
 
 ## Example
@@ -54,13 +75,10 @@ U B 1 5 40
 ```
 
 ```
-sbt "run lot-of-updates.txt 10.0 100"
+sbt "run lot-of-updates.txt 10.0 2"
 ```
 - Output
 ```
 50.0,40,60.0,10
 40.0,40,70.0,20
 ```
-- Visually 
-
-![Visual example](./images/example.png)
