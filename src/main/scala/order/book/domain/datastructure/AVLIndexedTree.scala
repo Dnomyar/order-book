@@ -1,54 +1,53 @@
 package order.book.domain.datastructure
 
 
-sealed trait BinaryTree[+T] {
+sealed trait AVLIndexedTree[+T] {
   val depth: Int
   val level: Int
   val balanceScore: Int
-  def insert[U >: T](index: Int, elementToInsert: U): BinaryTree[U]
-  def delete[U >: T](index: Int): BinaryTree[U]
-  def updated[U >: T](index: Int, elementToInsert: U): BinaryTree[U]
-  def balance: BinaryTree[T]
+  def insert[U >: T](index: Int, elementToInsert: U): AVLIndexedTree[U]
+  def delete[U >: T](index: Int): AVLIndexedTree[U]
+  def updated[U >: T](index: Int, elementToInsert: U): AVLIndexedTree[U]
+  def balance: AVLIndexedTree[T]
   def toList: List[T]
 }
 
-object BinaryTree {
-  def empty[T]: BinaryTree[T] = EmptyTree
+object AVLIndexedTree {
+  def empty[T]: AVLIndexedTree[T] = EmptyTree
 }
 
-
-case object EmptyTree extends BinaryTree[Nothing] {
+case object EmptyTree extends AVLIndexedTree[Nothing] {
   val depth: Int = 0
   val level: Int = 0
   val balanceScore: Int = 0
 
-  def insert[T](index: Int, elementToInsert: T): BinaryTree[T] =
+  def insert[T](index: Int, elementToInsert: T): AVLIndexedTree[T] =
     Node(EmptyTree, 0, elementToInsert, 0, EmptyTree)
 
-  def delete[T](index: Int): BinaryTree[T] = EmptyTree
+  def delete[T](index: Int): AVLIndexedTree[T] = EmptyTree
 
-  def updated[T](index: Int, elementToInsert: T): BinaryTree[T] = EmptyTree
+  def updated[T](index: Int, elementToInsert: T): AVLIndexedTree[T] = EmptyTree
 
   override def toList: List[Nothing] = List.empty
 
-  override def balance: BinaryTree[Nothing] = this
+  override def balance: AVLIndexedTree[Nothing] = this
 }
 
-case class Node[T](left: BinaryTree[T], leftNumberOfElement: Int,
+case class Node[T](left: AVLIndexedTree[T], leftNumberOfElement: Int,
                    element: T,
-                   rightNumberOfElement: Int, right: BinaryTree[T]) extends BinaryTree[T] {
+                   rightNumberOfElement: Int, right: AVLIndexedTree[T]) extends AVLIndexedTree[T] {
 
 
-  private def isCurrentNode(index: Int): Boolean = leftNumberOfElement == index
+  def isCurrentNode(index: Int): Boolean = leftNumberOfElement == index
   def isInTheLeftSide(index: Int): Boolean = index < leftNumberOfElement
   def isInTheRightSide(index: Int): Boolean = index > leftNumberOfElement
 
   def computeLeftIndex(index: Int): Int = index
   def computeRightIndex(index: Int): Int = index - leftNumberOfElement - 1
 
-  override def balance: BinaryTree[T] = {
+  override def balance: AVLIndexedTree[T] = {
 
-    def leftRotation(tree: BinaryTree[T]): BinaryTree[T] = this match {
+    def leftRotation(tree: AVLIndexedTree[T]): AVLIndexedTree[T] = this match {
       case Node(_, _, _, _, Node(rightLeft, rightLeftNumberOfElement, rightElement, rightRightNumberOfElement, rightRight)) =>
         Node(
           Node(
@@ -63,9 +62,10 @@ case class Node[T](left: BinaryTree[T], leftNumberOfElement: Int,
           rightRightNumberOfElement,
           rightRight
         )
+      case _ => this
     }
 
-    def rightLeftRotation(tree: BinaryTree[T]): BinaryTree[T] =  this match {
+    def rightLeftRotation(tree: AVLIndexedTree[T]): AVLIndexedTree[T] =  this match {
       case Node(_, _, _, _,
             Node(
               Node(
@@ -100,9 +100,10 @@ case class Node[T](left: BinaryTree[T], leftNumberOfElement: Int,
             rightRight
           )
         )
+      case _ => this
     }
 
-    def rightRotation(tree: BinaryTree[T]): BinaryTree[T] = this match {
+    def rightRotation(tree: AVLIndexedTree[T]): AVLIndexedTree[T] = this match {
       case Node(Node(leftLeft, leftLeftNumberOfElement, leftElement, leftRightNumberOfElement, leftRight), _, _, _, _) =>
         Node(
           leftLeft,
@@ -117,9 +118,10 @@ case class Node[T](left: BinaryTree[T], leftNumberOfElement: Int,
             right
           )
         )
+      case _ => this
     }
 
-    def leftRightRotation(tree: BinaryTree[T]): BinaryTree[T] = this match {
+    def leftRightRotation(tree: AVLIndexedTree[T]): AVLIndexedTree[T] = this match {
       case Node(
             Node(
               leftLeft,
@@ -153,6 +155,7 @@ case class Node[T](left: BinaryTree[T], leftNumberOfElement: Int,
             right
           )
         )
+      case _ => this
     }
 
     if(balanceScore == -2){
@@ -166,7 +169,7 @@ case class Node[T](left: BinaryTree[T], leftNumberOfElement: Int,
     }
   }
 
-  override def insert[U >: T](index: Int, elementToInsert: U): BinaryTree[U] =
+  override def insert[U >: T](index: Int, elementToInsert: U): AVLIndexedTree[U] =
     if(isInTheLeftSide(index) || isCurrentNode(index)){
       copy(
         left = left.insert(computeLeftIndex(index), elementToInsert).balance,
@@ -179,14 +182,14 @@ case class Node[T](left: BinaryTree[T], leftNumberOfElement: Int,
       ).balance
     }
 
-  def deleteMin: (T, BinaryTree[T]) = this match {
+  def deleteMin: (T, AVLIndexedTree[T]) = this match {
     case Node(EmptyTree, _, _, _, _) => (element, EmptyTree)
     case Node(leftNode @ Node(_, _, _, _, _), _, _, _, _) => leftNode.deleteMin match {
       case (minElement, leftTree) => (minElement, copy(left = leftTree, leftNumberOfElement = leftNumberOfElement - 1))
     }
   }
 
-  override def delete[U >: T](index: Int): BinaryTree[U] = this match {
+  override def delete[U >: T](index: Int): AVLIndexedTree[U] = this match {
     case _ if isInTheLeftSide(index) =>
       copy(
         left = left.delete(computeLeftIndex(index)).balance,
@@ -214,7 +217,7 @@ case class Node[T](left: BinaryTree[T], leftNumberOfElement: Int,
 
 
 
-  override def updated[U >: T](index: Int, elementToInsert: U): BinaryTree[U] =
+  override def updated[U >: T](index: Int, elementToInsert: U): AVLIndexedTree[U] =
     if(isCurrentNode(index)) copy(element = elementToInsert)
     else if (isInTheLeftSide(index)) copy(left = left.updated(computeLeftIndex(index), elementToInsert))
     else copy(right = right.updated(computeRightIndex(index), elementToInsert))

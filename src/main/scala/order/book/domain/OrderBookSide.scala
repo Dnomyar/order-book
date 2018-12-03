@@ -2,11 +2,11 @@ package order.book.domain
 
 import order.book.domain.commands.OrderBookInstruction
 import order.book.domain.commands.OrderBookInstruction.{Delete, New, Update}
-import order.book.domain.datastructure.BinaryTree
+import order.book.domain.datastructure.AVLIndexedTree
 
 import scala.util.{Success, Try}
 
-class OrderBookSide private[OrderBookSide] (orders: BinaryTree[OrderBookOrder]) {
+class OrderBookSide private[OrderBookSide] (orders: AVLIndexedTree[OrderBookOrder]) {
 
   def applyOrderChange(instruction: OrderBookInstruction,
                        priceLevelIndex: Int,
@@ -25,5 +25,5 @@ class OrderBookSide private[OrderBookSide] (orders: BinaryTree[OrderBookOrder]) 
 }
 
 object OrderBookSide {
-  def empty: OrderBookSide = new OrderBookSide(BinaryTree.empty)
+  def empty: OrderBookSide = new OrderBookSide(AVLIndexedTree.empty)
 }

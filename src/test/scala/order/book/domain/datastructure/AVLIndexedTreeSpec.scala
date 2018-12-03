@@ -3,18 +3,7 @@ package order.book.domain.datastructure
 import org.scalatest.{Matchers, WordSpec}
 
 
-class BinaryTreeSpec extends WordSpec with Matchers {
-//
-//  val tree: BinaryTree[Char] =
-//    EmptyTree
-//      .insert(1, '1')
-//      .insert(2, '2')
-//      .insert(3, '3')
-//      .insert(4, '4')
-//      .insert(5, '5')
-//      .insert(6, '6')
-
-
+class AVLIndexedTreeSpec extends WordSpec with Matchers {
 
   "It" should {
     "be possible to know if a given index is in the left or the right side of the tree" in {
@@ -252,51 +241,5 @@ class BinaryTreeSpec extends WordSpec with Matchers {
     }
   }
 
-//  "The minimum element of the tree" should {
-//    "is the element of the node if no children" in {
-//      EmptyTree.insert(0, 5).deleteMin should be (5, EmptyTree)
-//    }
-//
-//    "is the element at the left of the tree" in {
-//      Node(Node(Node(1), 2, Node(3)), 4, EmptyTree).deleteMin should be (
-//        1,
-//        Node(Node(EmptyTree, 2, Node(3)), 4, EmptyTree)
-//      )
-//    }
-//  }
-
-
-
-//
-//  "An value" should {
-//    "be addable to an empty tree" in {
-//      EmptyTree.insert(1) should be (Node(1))
-//    }
-//    "be addable in the left side of the tree" in {
-//      tree.insert(-1) should be (Node(
-//        Node(Node(-1), 1, EmptyTree),
-//        2,
-//        Node(Node(3), 4, Node(EmptyTree, 5, Node(6)))
-//      ))
-//    }
-//    "be addable in the right side of the tree" in {
-//      tree.insert(7) should be (Node(
-//        Node(1),
-//        2,
-//        Node(Node(3), 4, Node(EmptyTree, 5, Node(EmptyTree, 6, Node(7))))
-//      ))
-//    }
-//    "be addable in the middle of the tree" in {
-//      Node(
-//        Node(1),
-//        2,
-//        Node(Node(4), 5, Node(EmptyTree, 6, Node(7)))
-//      ).insert(3) should be (Node(
-//        Node(1),
-//        2,
-//        Node(Node(Node(3), 4, EmptyTree), 5, Node(EmptyTree, 6, Node(7)))
-//      ))
-//    }
-//  }
 
 }

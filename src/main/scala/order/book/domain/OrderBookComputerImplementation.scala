@@ -8,7 +8,6 @@ import scala.util.Try
 
 class OrderBookComputerImplementation extends OrderBookComputer {
 
-  // O(|updateOrderBookCommands| + book_depth)
   def compute(updateOrderBookCommands: Iterator[UpdateOrderBookCommand], tickSize: TickSize, bookDepth: Int): Try[List[OrderBookProjection]] =
     updateOrderBookCommands
       .filter(_.priceLevelIndex <= bookDepth)
